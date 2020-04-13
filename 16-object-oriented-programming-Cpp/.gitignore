@@ -1,0 +1,19 @@
+# Prerequisites
+*.d
+# Compiled Object files
+*.slo
+*.lo
+# Prerequisites
+*.d
+# Object files
+*.o
+*.ko
+# Makefile files  
+Makefile*
+# 大于100M 
+*-big.*
+# 私有不更新
+*-pvt.*
+# 压缩文件
+*.zip
+*.rar

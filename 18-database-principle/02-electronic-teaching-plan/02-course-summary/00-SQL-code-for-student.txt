@@ -1,0 +1,661 @@
+--数据定义（2019.03.13）
+--创建数据库
+--create database student
+--切换当前数据库
+--use student
+--创建模式
+--create schema s_t
+--创建基本表
+--student表
+--create table student
+--(
+--  sno char(9) primary key,
+--  sname char(10) not null,
+--  ssex char(2),
+--  sage smallint,
+--  sdept varchar(20)
+--);
+--course表
+--create table course
+--(
+--  cno char(4) primary key,
+--  cname char(15) unique,
+--  cpno char(4),
+--  ccredit int,
+--  foreign key (cpno) references course(cno)
+--);
+--SC表
+--create table sc
+--(
+--  sno char(9),
+--  cno char(4),
+--  grade smallint,
+--  primary key (sno,cno),
+--  foreign key (sno) references student(sno),
+--  foreign key (cno) references course(cno)  
+--);
+
+--修改基本表（2019.03.18）
+--alter table student add s_entrance date
+--alter table student drop column s_entrance
+--alter table student alter column sage int
+--alter table course add unique(cname)
+--删除基本表
+--drop table student
+
+--创建索引
+
+--create unique index stusno on student(sno asc)
+
+--create index coucno on course(cno desc)
+
+--drop index course.coucno
+
+--create clustered index coucname on course(cname asc)
+
+
+--数据查询（2019.03.20）
+--查询所有同学的学号、姓名、所在系
+--select sno,sname,sdept
+--from student
+
+--select *
+--from student
+
+--查询每个学生的学号、姓名、出生年份
+--select sno 学号,sname 姓名,2019-sage 出生年份
+--from student
+
+--select sno,sname,sdept,'2017' 入学年份
+--from student
+
+--select COUNT(*) 人数
+--from student
+
+--select distinct sdept
+--from student
+
+--select count(distinct sno)
+--from sc
+
+--select sname,sage
+--from student
+--where not sage>=20
+
+--select sno,sname
+--from student
+--where ssex='女'
+--select cname
+--from course
+--where ccredit=4
+
+--select distinct sno
+--from sc
+--where grade>85
+
+--select sno,sname,sage
+--from student
+--where sage between 23 and 20
+
+--select sno,sname,sdept
+--from student
+--where sdept in ('CS','IS')
+
+--select sno,sname,sage
+--from student
+--where sname like '欧阳__'
+
+--select sno,sname,sage
+--from student
+--where sage is null
+
+--单表查询、连接查询（2019.03.27）
+--select cname,ccredit 
+--from course
+--where cname like '数%'
+--select sno,sname
+--from student
+--where sdept='CS' and sage<20 and ssex='女'
+--select *
+--from course
+--where cpno='5' or cpno='7'  -- cpno in ('5','7')
+--select *
+--from student
+--order by sage desc,ssex asc
+
+--select *
+--from student,sc
+--where student.sno=sc.sno
+
+--数据更新（2019.04.08）
+
+--insert into student(sno,sname,sage,ssex,sdept)
+--values('201215128','陈冬',18,'男','IS')
+
+--insert into student
+--values('201215129','张成民',19,'男','CS')
+
+--insert into student(sno,sname,sdept)
+--values('201215130','张三','MA')
+--insert into student
+--values('201215131','李四',18,NULL,NULL)
+
+--select sno,sname,sdept
+--from student
+--where sdept is null
+
+--create table avggrade
+--(
+--  sno char(9),
+--  avggrad smallint
+--);
+
+--insert into avggrade(sno,avggrad)
+--select sno,AVG(grade)
+--from sc
+--group by sno
+
+--update student
+--set sage=22
+--where sno='200215121'
+
+--update student
+--set sage=sage+1
+
+--update student
+--set sage=sage+1
+--where sdept='CS'
+
+--update student
+--set sage = null
+--where sdept='CS'
+
+--update sc
+--set grade=100
+--where sno in 
+--        (
+--          select sno
+--          from student
+--          where sdept='CS'
+--        )
+
+--update sc
+--set grade=90
+--where 'CS'=
+--	(select sdept
+--	from student
+--	where student.sno=sc.sno)
+--update student
+--set sno='200315124'
+--where sname='赵洋'
+
+--create view is_student
+--as
+--select sno,sname,sdept
+--from student
+--where sdept='IS'
+--with check option
+
+--select *
+--from is_student
+
+
+--create view is_student1
+--as
+--select sno,sname,sdept
+--from student
+--where sdept='IS'
+
+--insert into is_student1
+--values('201215135','郭靖','CS')
+--insert into is_student
+--values('201215126','黄蓉','MA')
+
+--select *
+--from is_student
+
+--select sno,sname,sdept
+--from student
+--where sdept='IS'
+
+--create view is_s1
+--as
+--select student.sno,sname,grade
+--from student,sc
+--where student.sno=sc.sno
+--  and sdept='IS' 
+--  and cno='1'
+  
+--select *
+--from is_s1
+
+--create view is_s2
+--as
+--select *
+--from is_s1
+--where grade>90
+
+--create view g_v(sno,avggrade)
+--as
+--select sno,avg(grade)
+--from sc
+--group by sno
+
+--select *
+--from g_v
+
+--drop view is_s1
+
+--select *
+--from is_s2
+
+--update student
+--set sage+=1
+
+--create login l1 with password='1'
+--create login l2 with password='1'
+
+--create user user1 for login l1
+--grant select
+--on student
+--to user1
+
+--grant insert
+--on student
+--to user1
+--with grant option
+--create user user2 for login l2
+
+--declare @myvar char(12)
+--set @myvar='Hello world!'
+--print @myvar
+--declare @var1 char(10),@var2 datetime
+--set @var2=GETDATE()
+--set @var1=convert(char(10),@var2,10)
+--select @var1
+
+--if exists(select * from student where sno='201215120')
+--  begin
+--    select *
+--    from student
+--    where sno='201215120'
+--  end
+--else
+--  print '没找到!'
+
+--select *
+--from student
+
+--select sno,sname,ssex=
+--					case ssex
+--					when '男' then 'M'
+--					when '女' then 'F'
+--					else 'N'
+--					end
+--from student
+
+--declare @sum int,@X int
+--set @sum=0
+--set @X=1
+--while (@X<=10)
+--  begin
+--    set @sum=@sum+@X
+--    set @X=@X+1
+--  end
+--print '1-10的和是'+convert(char(2),@sum)
+
+--begin
+--  waitfor delay '00:00:15'
+--    select *
+--    from student
+--end
+
+
+--print year(getdate())
+--print datediff(dd,'1979-06-01',getdate())
+--print month('2016-12-10')
+
+--print ascii('abcd')
+
+--print char(97)
+
+--print substring('2017011666',1,4)
+
+--select sno+sname+CAST(sage as CHAR(2))
+--from student
+
+--游标（2019.03.15）
+----1）声明游标
+--declare num_cursor cursor
+--for select sno
+--    from student
+--for read only
+
+----2）打开游标
+
+--open num_cursor
+
+----3）从游标中提取数据
+--declare @num int,@sno char(9)
+--set @num=0
+--fetch next from num_cursor into @sno
+--while @@FETCH_STATUS=0
+--begin
+--  if not exists (select * from sc where sno=@sno)
+--    set @num=@num+1
+--  fetch next from num_cursor into @sno  
+--end
+--print '未选课的人数有'+convert(char(2),@num)+'人'
+----4）关闭游标
+--close num_cursor
+----5）释放游标
+--deallocate num_cursor
+
+----1）声明游标
+--declare level_cursor cursor
+--for select grade
+--    from sc
+--for read only
+----2）打开游标
+--open level_cursor
+----3）从游标中提取数据
+--declare @mygrade int,@a int,@b int,@c int,@d int,@e int
+--select @a=0,@b=0,@c=0,@d=0,@e=0
+--fetch next from level_cursor into @mygrade
+--while @@FETCH_STATUS=0
+--begin
+--  if @mygrade is null
+--    set @e=@e+1
+--  else if @mygrade<60
+--         set @e=@e+1
+--       else if @mygrade<70
+--              set @d=@d+1
+--            else if @mygrade<80
+--                   set @c=@c+1
+--                 else if @mygrade<90
+--                        set @b=@b+1
+--                      else 
+--                        set @a=@a+1
+--  fetch next from level_cursor into @mygrade
+--end
+--select @a 优秀,@b 良好,@c 中等,@d 及格,@e 不及格
+
+----4）关闭游标
+--close level_cursor
+----5）释放游标
+--deallocate level_cursor
+
+----1）声明游标
+--declare tax_cursor cursor
+--for select wno,salary
+--    from worker
+--for read only
+
+----2）打开游标
+--open tax_cursor
+----3）从游标中提取数据
+--declare @wno char(10),@salary int
+--fetch next from tax_cursor into @wno,@salary
+--while @@FETCH_STATUS
+--begin
+--  if @salary>3000
+--    update worker
+--    set tax=(salary-3000)*0.1
+--    where wno=@wno
+--  --else 
+--    fetch next from tax_cursor into @wno,@salary
+--end
+----4）关闭游标
+--  close tax_cursor
+----5）释放游标
+--  deallocate tax_cursor
+
+
+--存储过程
+
+--create proc proc_insert_student
+--@sno char(9),
+--@snmae char(10),
+--@ssex char(2)='男',
+--@sage smallint,
+--@sdept varchar(20)
+--as
+--begin
+--  insert into student(sno,sname,sage,ssex,sdept)
+--  values(@sno,@snmae,@sage,@ssex,@sdept)
+--end
+
+
+--exec proc_insert_student @sno='201215181',@snmae=
+--'段誉',@sage=18,@sdept='MA'
+
+--create proc proc_avggrade
+--@sno char(9),
+--@savg int output
+--as
+--begin
+--  select @savg=avg(grade)
+--  from sc
+--  where sno=@sno
+--end
+
+--declare @avgrade int
+--set @avgrade=0
+--exec proc_avggrade '200215121',@avgrade out
+--select @avgrade 平均成绩
+
+--create proc proc1
+--as
+--begin
+--  select avg(grade)
+--  from sc
+--  group by sno
+--end
+
+--exec proc1
+
+--create proc proc2
+--@sno char(9)
+--as
+--begin
+--  select avg(grade)
+--  from sc
+--  where sno=@sno
+--end
+
+--exec  proc2 '200215121'
+
+--create proc proc3
+--@sno char(9),
+--@savg int out
+--as
+--begin
+--  select @savg=avg(grade)
+--  from sc
+--  where sno=@sno
+--end
+
+--declare @avg int
+--exec proc3 '200215121',@avg out
+--print @avg
+
+--create proc proc_sum
+--@depart  char(20),
+--@num int out
+--as
+--begin
+--  select @num=COUNT(*)
+--  from student
+--  where department=@depart
+--end
+
+
+--drop proc proc1
+
+
+--自定义函数（2019.05.22）
+
+--create function dataonly(@date datetime)
+--returns varchar(12)
+--as
+--begin
+--  return convert(varchar(12),@date,102)
+--end
+
+--print dbo.dataonly(getdate())
+
+--create function whichgeneration(@birthday datetime)
+--returns varchar(10)
+--as
+--begin
+--  if YEAR(@birthday) <1980
+--    return 'too old!'
+--  else if YEAR(@birthday)<1990
+--    return '80s'
+--  else
+--    return '90s'
+-- return ''
+--end
+
+--print dbo.whichgeneration('1979-06-01')
+
+--declare @var1 varchar(10)
+--set @var1=dbo.whichgeneration('1979-06-01')
+--print @var1
+
+--create function fun1()
+--returns table
+--as
+--return  select sno,sname
+--        from student
+
+--select *
+--from fun1()
+
+--create function fun2()
+--returns table
+--as
+--return
+--    select avg(grade) 计算机系平均成绩
+--    from student,sc
+--    where sdept='CS' and student.sno=sc.sno
+
+--select *
+--from fun2()
+
+--create function fun3(@sdept varchar(20))
+--returns table
+--as
+--return
+--    select avg(grade) 计算机系平均成绩
+--    from student,sc
+--    where sdept=@sdept and student.sno=sc.sno
+
+--select *
+--from fun3('cs')
+
+--触发器（2019.05.22）
+
+--create trigger insert_sc_trigger
+--on sc
+--for insert
+--as
+--begin
+--  declare @sno char(9)
+--  select @sno=sno from inserted
+--  if not exists(select * from student where sno=@sno)
+--     begin
+--       delete from sc where sno=@sno
+--       print '不存在此学生学号，插入不成功！'
+--     end
+--end
+
+--create trigger tr_sc_grade
+--on sc
+--after insert
+--as
+--begin
+--  declare @score smallint
+--  select @score=grade
+--  from inserted
+--  if (@score>100 or @score<0)
+--    begin
+--      raiserror('成绩必须在0-100之间，哈哈哈！',10,1)
+--      --delete from sc where grade=@score
+--      rollback transaction
+--    end
+--end
+
+--insert into sc(sno,cno,grade)
+--values('200215121','4',180)
+--create trigger tr_student_update
+--on student
+--for update
+--as
+--begin
+--  select *
+--  from inserted
+--end
+
+--update student
+--set sname='zhaoyang'
+--where sname='乔峰'
+
+--create trigger tr_student_update1
+--on student
+--for update
+--as
+--begin
+--  select *
+--  from deleted
+--end
+
+--update student
+--set sname='乔峰'
+--where sname='zhaoyang'
+
+--create table s1
+--(
+--  sno char(9),
+--  cno char(4),
+--  grade smallint
+--);
+
+--create trigger tr_sc_delete
+--on sc
+--for delete
+--as
+--begin
+--  insert into s1
+--  select *
+--  from deleted
+--end
+
+--create function Funbook
+--(
+--  @类别名 char(20)
+--)
+--returns table
+--as
+--  return
+--    select 图书.*
+--    from 图书,图书类别
+--    where 图书.类别编号=图书类别.类别编号 and
+--         图书类别.类别名=@类别名
+
+--create trigger TrInsUpd
+--on 图书
+--for insert,update
+--as
+--begin
+--  declare @lbdh char(10)
+--  select @lbdh=类别代号 from inserted
+--  if not exists
+--    (select * 
+--     from 图书类别 
+--     where 类别代号=@lbdh)
+--     begin
+--       raiserror ('图书类别号不存在',16,1)
+--       rollback transaction
+--     end
+--end
