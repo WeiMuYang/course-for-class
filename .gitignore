@@ -1,5 +1,8 @@
 # 一些目录
 
+# 一些目录
+*/*others/
+*/*Others/
 # Prerequisites
 *.d
 # Compiled Object files
@@ -12,10 +15,11 @@
 *.ko
 # Makefile files  
 Makefile*
-# 大于100M 
+# 大于5M 
 *-big.*
 # 私有不更新
 *-pvt.*
+*人名*
 # 压缩文件
 *.zip
 *.rar
