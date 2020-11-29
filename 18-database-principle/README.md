@@ -1,4 +1,4 @@
-[计划目录](./02-electronic-teaching-plan/01-class-plan)   
+# [数据库原理](./)  
 
 
 # 08-2   
